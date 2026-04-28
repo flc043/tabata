@@ -2,7 +2,7 @@
   "name": "Tabata 計時器 Pro",
   "short_name": "Tabata Pro",
   "description": "專業的 Tabata 運動計時器",
-  "start_url": "./tabata.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b111a",
   "theme_color": "#0b111a",
