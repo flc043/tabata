@@ -1,7 +1,7 @@
 {
   "name": "Tabata 計時器 Pro",
   "short_name": "Tabata Pro",
-  "description": "專業的 Tabata 運動計時器",
+  "description": "專業的 Tabata 計時器，幫助您高效訓練。",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b111a",
@@ -15,7 +15,8 @@
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
