@@ -15,6 +15,9 @@
       .then(() => console.log("Service Worker Registered"));
   }
 </script>
+
+
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tabata 計時器 Pro</title>
@@ -382,6 +385,36 @@
 </div>
 
 <script>
+
+let wakeLock = null;
+
+// 定義請求螢幕不熄滅的函式
+async function requestWakeLock() {
+  try {
+    // 只有支援的瀏覽器才會執行
+    if ('wakeLock' in navigator) {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('螢幕長亮已啟動');
+      
+      // 監聽：如果因為系統原因鎖定失效，可以自動處理
+      wakeLock.addEventListener('release', () => {
+        console.log('螢幕長亮已失效');
+      });
+    }
+  } catch (err) {
+    console.log(`${err.name}, ${err.message}`);
+  }
+}
+
+// 定義釋放長亮的函式
+function releaseWakeLock() {
+  if (wakeLock !== null) {
+    wakeLock.release();
+    wakeLock = null;
+    console.log('螢幕長亮已釋放');
+  }
+}
+    
     let settings = { prepare: 5, exercise: 5, rest: 5, rounds: 2 };
     
     // 計時器變數
