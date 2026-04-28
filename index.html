@@ -804,3 +804,14 @@
     document.getElementById('card-rest').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
     document.getElementById('card-rounds').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
     document.getElementById('start-btn').addEventListener('click', startWorkout);
+    document.getElementById('pause-btn').addEventListener('click', togglePause);
+    document.getElementById('stop-btn').addEventListener('click', stopWorkout);
+    document.getElementById('picker-overlay').addEventListener('click', function(event) {
+        if (event.target === this) {
+            document.getElementById('picker-overlay').classList.remove('active');
+            document.getElementById('picker-sheet').classList.remove('active');
+        }
+    });
+</script>
+</body>
+</html>
