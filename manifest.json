@@ -1,0 +1,16 @@
+{
+  "name": "Tabata 計時器",
+  "short_name": "Tabata",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f1218",
+  "theme_color": "#54b4ff",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
