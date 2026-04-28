@@ -11,9 +11,7 @@
     <!-- PWA 相關設定 -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b111a">
-    <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         :root {
@@ -374,8 +372,24 @@
     <button class="confirm-btn" id="confirm-btn">確認完成 DONE</button>
 </div>
 
-<script>
+<script>console.log('Script started loading.');
+    // 註冊 Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(registration => console.log('Service Worker registered:', registration))
+                .catch(error => console.error('Service Worker registration failed:', error));
+        });
+    } else { console.log('Service Worker not supported or not registered.'); }
+
+    // 全局錯誤處理，幫助捕捉未捕獲的 JavaScript 錯誤
+    window.addEventListener('error', (event) => {
+        console.error('An uncaught error occurred:', event.error);
+        alert('發生了一個錯誤，請檢查控制台。');
+    });
+
     let settings = { prepare: 5, exercise: 5, rest: 5, rounds: 2 };
+    console.log('Initial settings:', settings); // Debugging log
     
     // 計時器變數
     let timerInterval;
@@ -574,6 +588,7 @@
     }
 
     function openPicker(key, title, isTime) {
+        console.log('openPicker function called for key:', key, 'isTime:', isTime); // Debugging log
         initAudio(); // 趁機喚醒音效
         currentEditingKey = key;
         isTimePicker = isTime;
@@ -608,6 +623,7 @@
     }
 
     function closePicker() {
+        console.log('closePicker function called'); // Debugging log
         document.getElementById('picker-overlay').classList.remove('active');
         document.getElementById('picker-sheet').classList.remove('active');
     }
@@ -624,6 +640,7 @@
             if (sets === 0) sets = 1;
             settings[currentEditingKey] = sets;
         }
+        console.log('Picker confirmed. Settings updated:', settings); // Debugging log
         updateSettingsUI();
         closePicker();
     }
@@ -650,6 +667,7 @@
     }
 
     function startWorkout() {
+        console.log('startWorkout function called'); // Debugging log
         initAudio(); 
         requestWakeLock();
         isPaused = false;
