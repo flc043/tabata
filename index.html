@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+
+    meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline';">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <!-- PWA 相關設定 -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#54b4ff">
@@ -420,7 +426,7 @@ function releaseWakeLock() {
     // 計時器變數
     let timerInterval;
     let finishTimeout;
-    let wakeLock = null;
+ 
     let currentPhase = ''; 
     let currentRound = 1;
     let expectedEndTime = 0;
