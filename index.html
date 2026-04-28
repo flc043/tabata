@@ -803,6 +803,7 @@
     document.getElementById('card-exercise').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
     document.getElementById('card-rest').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
     document.getElementById('card-rounds').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
+    document.getElementById('confirm-btn').addEventListener('click', confirmPicker);
     document.getElementById('start-btn').addEventListener('click', startWorkout);
     document.getElementById('pause-btn').addEventListener('click', togglePause);
     document.getElementById('stop-btn').addEventListener('click', stopWorkout);
