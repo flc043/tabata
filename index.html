@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
+    <!-- 1. 內容安全政策 (CSP) - 必須放在 head 最上方 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval'; script-src * 'unsafe-inline' 'unsafe-eval'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline';">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tabata Timer Pro</title>
-    
-    <!-- PWA 與 行動裝置優化 -->
+    <title>Tabata Pro</title>
+
+    <!-- PWA 設定 -->
     <link rel="manifest" href="./manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -26,43 +29,43 @@
         * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-color); color: var(--text-main); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
 
-        .container { width: 100%; max-width: 450px; padding: 25px; height: 100vh; display: flex; flex-direction: column; }
+        .container { width: 100%; max-width: 450px; padding: 20px; height: 100vh; display: flex; flex-direction: column; }
 
         /* 設定畫面 */
-        #setup-screen { display: flex; flex-direction: column; gap: 12px; animation: fadeIn 0.5s; }
-        .input-group { background: var(--card-bg); padding: 18px; border-radius: 20px; display: flex; flex-direction: column; }
-        .label { color: var(--text-dim); font-size: 14px; margin-bottom: 5px; font-weight: 500; }
-        .value-control { display: flex; align-items: center; justify-content: space-between; font-size: 32px; font-weight: 800; }
-        input[type="number"] { background: transparent; border: none; color: white; font-size: 36px; width: 100px; text-align: left; outline: none; font-weight: 800; }
-        .unit { font-size: 16px; color: var(--text-dim); margin-left: 5px; }
+        #setup-screen { display: flex; flex-direction: column; gap: 12px; height: 100%; }
+        .input-group { background: var(--card-bg); padding: 18px; border-radius: 18px; display: flex; flex-direction: column; transition: transform 0.2s; }
+        .input-group:active { transform: scale(0.98); }
+        .label { color: var(--text-dim); font-size: 13px; margin-bottom: 5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .value-control { display: flex; align-items: center; justify-content: space-between; }
+        input[type="number"] { background: transparent; border: none; color: white; font-size: 38px; width: 120px; outline: none; font-weight: 800; }
+        .unit { font-size: 16px; color: var(--text-dim); font-weight: bold; }
 
         .start-btn { 
             background: var(--accent-blue); color: #000; border: none; border-radius: 50px; 
-            padding: 20px; font-size: 20px; font-weight: bold; margin-top: auto; margin-bottom: 20px; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(84, 180, 255, 0.2);
+            padding: 20px; font-size: 20px; font-weight: 900; margin-top: auto; margin-bottom: 20px; cursor: pointer;
+            box-shadow: 0 10px 25px rgba(84, 180, 255, 0.25);
         }
 
         /* 計時器畫面 */
-        #timer-screen { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; animation: fadeIn 0.5s; }
+        #timer-screen { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; }
         
-        .progress-container { position: relative; width: 300px; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .progress-container { position: relative; width: 320px; height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         svg { transform: rotate(-90deg); width: 100%; height: 100%; }
-        circle { fill: none; stroke-width: 10; stroke-linecap: round; }
+        circle { fill: none; stroke-width: 12; stroke-linecap: round; }
         .bg-circle { stroke: #2a313d; }
         .progress-circle { stroke: var(--ready-color); transition: stroke-dashoffset 0.1s linear, stroke 0.3s; }
 
         .status-badge { 
-            position: absolute; top: 75px; padding: 5px 18px; border-radius: 10px; 
-            font-weight: 800; font-size: 14px; color: #000; letter-spacing: 1px;
+            position: absolute; top: 80px; padding: 6px 20px; border-radius: 12px; 
+            font-weight: 900; font-size: 14px; color: #000;
         }
-        .timer-display { font-size: 84px; font-weight: 800; margin: 10px 0; letter-spacing: -2px; }
-        .cycle-info { color: var(--text-dim); font-size: 20px; font-weight: 500; }
+        .timer-display { font-size: 96px; font-weight: 900; margin: 10px 0; letter-spacing: -3px; }
+        .cycle-info { color: var(--text-dim); font-size: 22px; font-weight: 600; }
 
-        .controls { display: flex; gap: 15px; width: 100%; margin-top: 60px; }
-        .control-btn { flex: 1; padding: 18px; border-radius: 50px; border: 2.5px solid #3d4656; background: transparent; color: white; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .controls { display: flex; gap: 15px; width: 100%; margin-top: 50px; }
+        .control-btn { flex: 1; padding: 18px; border-radius: 50px; border: 2.5px solid #3d4656; background: transparent; color: white; font-size: 18px; font-weight: 800; cursor: pointer; }
         .btn-end { border-color: var(--work-color); color: var(--work-color); }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .hidden { display: none !important; }
     </style>
 </head>
@@ -84,7 +87,7 @@
             <div class="value-control"><input type="number" id="restTime" value="10"><span class="unit">秒 SEC</span></div>
         </div>
         <div class="input-group">
-            <div class="label">循環組數 SETS</div>
+            <div class="label">循環組數 ROUNDS</div>
             <div class="value-control"><input type="number" id="totalCycles" value="8"><span class="unit">組 SETS</span></div>
         </div>
         <button class="start-btn" onclick="startWorkout()">開始運動 START</button>
@@ -93,9 +96,9 @@
     <!-- 計時器畫面 -->
     <div id="timer-screen">
         <div class="progress-container">
-            <svg>
-                <circle class="bg-circle" cx="150" cy="150" r="135"></circle>
-                <circle id="progress-bar" class="progress-circle" cx="150" cy="150" r="135"></circle>
+            <svg viewBox="0 0 340 340">
+                <circle class="bg-circle" cx="170" cy="170" r="150"></circle>
+                <circle id="progress-bar" class="progress-circle" cx="170" cy="170" r="150"></circle>
             </svg>
             <div id="status-label" class="status-badge" style="background: var(--ready-color);">準備 READY</div>
             <div id="timer-text" class="timer-display">00:05</div>
@@ -110,62 +113,53 @@
 </div>
 
 <script>
-    // --- 變數宣告 (全域只宣告一次) ---
-    let timer;
-    let timeLeft;
+    // --- 全域變數 (修復重複宣告) ---
+    let timer = null;
+    let timeLeft = 0;
     let currentCycle = 1;
     let isPaused = false;
     let phase = 'READY'; 
     let wakeLock = null;
     
-    const settings = { prep: 0, work: 0, rest: 0, cycles: 0 };
     const circle = document.getElementById('progress-bar');
-    const radius = circle.r.baseVal.value;
+    const radius = 150;
     const circumference = 2 * Math.PI * radius;
-
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
 
-    // --- Wake Lock 螢幕長亮控制 ---
+    // --- Wake Lock 控制 ---
     async function requestWakeLock() {
-        try {
-            if ('wakeLock' in navigator) {
+        if ('wakeLock' in navigator) {
+            try {
                 wakeLock = await navigator.wakeLock.request('screen');
                 console.log('螢幕長亮已啟動');
+            } catch (err) {
+                console.error('WakeLock 失敗:', err);
             }
-        } catch (err) {
-            console.error(`${err.name}: ${err.message}`);
         }
     }
 
     function releaseWakeLock() {
         if (wakeLock !== null) {
-            wakeLock.release().then(() => {
-                wakeLock = null;
-                console.log('螢幕長亮已關閉');
-            });
+            wakeLock.release().then(() => { wakeLock = null; });
         }
     }
 
-    // --- 計時器邏輯 ---
+    // --- 核心邏輯 ---
     function startWorkout() {
-        // 取得輸入值
-        settings.prep = parseInt(document.getElementById('prepTime').value) || 5;
-        settings.work = parseInt(document.getElementById('workTime').value) || 20;
-        settings.rest = parseInt(document.getElementById('restTime').value) || 10;
-        settings.cycles = parseInt(document.getElementById('totalCycles').value) || 8;
+        const prep = parseInt(document.getElementById('prepTime').value) || 0;
+        const work = parseInt(document.getElementById('workTime').value) || 0;
+        const rest = parseInt(document.getElementById('restTime').value) || 0;
+        const cycles = parseInt(document.getElementById('totalCycles').value) || 1;
 
-        // 畫面切換
+        window.workoutSettings = { prep, work, rest, cycles };
+        
         document.getElementById('setup-screen').classList.add('hidden');
         document.getElementById('timer-screen').style.display = 'flex';
 
         currentCycle = 1;
         isPaused = false;
-        
-        // 請求長亮
         requestWakeLock();
-        
-        // 開始第一階段：準備
-        startPhase('READY', settings.prep);
+        startPhase('READY', prep);
     }
 
     function startPhase(newPhase, duration) {
@@ -187,25 +181,26 @@
     }
 
     function nextPhase() {
+        const s = window.workoutSettings;
         if (phase === 'READY') {
-            startPhase('WORK', settings.work);
+            startPhase('WORK', s.work);
         } else if (phase === 'WORK') {
-            if (settings.rest > 0) {
-                startPhase('REST', settings.rest);
+            if (s.rest > 0) {
+                startPhase('REST', s.rest);
             } else {
-                handleCycleIncrement();
+                incrementCycle();
             }
         } else if (phase === 'REST') {
-            handleCycleIncrement();
+            incrementCycle();
         }
     }
 
-    function handleCycleIncrement() {
+    function incrementCycle() {
         currentCycle++;
-        if (currentCycle > settings.cycles) {
+        if (currentCycle > window.workoutSettings.cycles) {
             finishWorkout();
         } else {
-            startPhase('WORK', settings.work);
+            startPhase('WORK', window.workoutSettings.work);
         }
     }
 
@@ -214,41 +209,35 @@
         const statusLabel = document.getElementById('status-label');
         const cycleText = document.getElementById('cycle-text');
         
-        // 格式化時間
         let m = Math.floor(timeLeft / 60);
         let s = timeLeft % 60;
         timerText.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        cycleText.innerText = `第 ${currentCycle} / ${settings.cycles} 組`;
+        cycleText.innerText = `第 ${currentCycle} / ${window.workoutSettings.cycles} 組`;
 
-        // 更新狀態與顏色
         let color, labelText, total;
         if (phase === 'READY') {
-            color = 'var(--ready-color)'; labelText = '準備 READY'; total = settings.prep;
+            color = 'var(--ready-color)'; labelText = '準備 READY'; total = window.workoutSettings.prep;
         } else if (phase === 'WORK') {
-            color = 'var(--work-color)'; labelText = '運動 WORK'; total = settings.work;
+            color = 'var(--work-color)'; labelText = '運動 WORK'; total = window.workoutSettings.work;
         } else {
-            color = 'var(--rest-color)'; labelText = '休息 REST'; total = settings.rest;
+            color = 'var(--rest-color)'; labelText = '休息 REST'; total = window.workoutSettings.rest;
         }
 
         circle.style.stroke = color;
         statusLabel.style.background = color;
         statusLabel.innerText = labelText;
 
-        // 進度條動畫
-        const offset = circumference - (timeLeft / total) * circumference;
+        const offset = total > 0 ? circumference - (timeLeft / total) * circumference : 0;
         circle.style.strokeDashoffset = offset;
     }
 
     function togglePause() {
         isPaused = !isPaused;
         document.getElementById('pause-btn').innerText = isPaused ? '繼續 RESUME' : '暫停 PAUSE';
-        document.getElementById('pause-btn').style.borderColor = isPaused ? 'var(--accent-blue)' : '#3d4656';
     }
 
     function endWorkout() {
-        if (confirm("確定要結束運動嗎？")) {
-            finishWorkout();
-        }
+        if (confirm("結束運動？")) finishWorkout();
     }
 
     function finishWorkout() {
@@ -256,13 +245,13 @@
         releaseWakeLock();
         document.getElementById('setup-screen').classList.remove('hidden');
         document.getElementById('timer-screen').style.display = 'none';
-        document.getElementById('pause-btn').innerText = '暫停 PAUSE';
+        alert("運動完成！");
     }
 
-    // --- PWA Service Worker 註冊 ---
+    // --- PWA 註冊 ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js').then(() => console.log("PWA Ready"));
+            navigator.serviceWorker.register('./sw.js').then(() => console.log('Service Worker Registered'));
         });
     }
 </script>
