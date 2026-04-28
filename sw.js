@@ -1,22 +1,26 @@
-const CACHE_NAME = 'tabata-v1';
+const CACHE_NAME = 'tabata-v2';
 const ASSETS = [
-  'index.html',
-  'style.css', // 如果你有獨立的 CSS 檔
-  'script.js', // 如果你有獨立的 JS 檔
-  'manifest.json',
-  'icon.png'
+  './',
+  './index.html',
+  './manifest.json',
+  './icon.svg' // 確保你有這個檔案，或改名為你的圖示檔名
 ];
 
-// 安裝並快取資源
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then((cache) => {
+      // 使用 map 逐一加入，避免其中一個失敗導致全部失敗
+      return Promise.all(
+        ASSETS.map(url => {
+          return cache.add(url).catch(err => console.log('抓不到檔案:', url));
+        })
+      );
+    })
   );
 });
 
-// 攔截請求，讓離線也能跑
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
+    caches.match(e.request).then((res) => res || fetch(e.request))
   );
 });
