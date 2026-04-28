@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tabata 計時器 Pro</title>
     <!-- 資訊安全強化：內容安全策略 (CSP) 阻擋跨站腳本攻擊 (XSS) 與未授權的外部連線 -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; manifest-src 'self'; script-src 'unsafe-inline' 'self'; style-src 'unsafe-inline'; img-src 'self' data:; media-src 'self' data:; connect-src 'self'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; require-trusted-types-for 'script';">
     <!-- 資訊安全強化：不傳送 Referrer 資訊 -->
     <meta name="referrer" content="no-referrer">
+    <!-- PWA 相關設定 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0b111a">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         :root {
             --bg-color: #0b111a;
@@ -545,7 +551,8 @@
     let ttPolicy;
     if (window.trustedTypes && trustedTypes.createPolicy) {
         ttPolicy = trustedTypes.createPolicy('default', {
-            createHTML: (string) => string // 在實際應用中應考慮使用 DOMPurify 等庫來進行清洗
+            createHTML: (string) => string, // 在實際應用中應考慮使用 DOMPurify 等庫來進行清洗
+            createScriptURL: (string) => string
         });
     }
     const safeHTML = (htmlStr) => ttPolicy ? ttPolicy.createHTML(htmlStr) : htmlStr;
@@ -778,13 +785,3 @@
     document.getElementById('card-rest').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
     document.getElementById('card-rounds').addEventListener('click', function() { openPicker(this.dataset.key, this.dataset.title, this.dataset.istime === 'true'); });
     document.getElementById('start-btn').addEventListener('click', startWorkout);
-    document.getElementById('pause-btn').addEventListener('click', togglePause);
-    document.getElementById('stop-btn').addEventListener('click', stopWorkout);
-    document.getElementById('picker-overlay').addEventListener('click', closePicker);
-    document.getElementById('confirm-btn').addEventListener('click', confirmPicker);
-
-    // 初始化
-    updateSettingsUI();
-</script>
-</body>
-</html>
