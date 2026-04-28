@@ -1,6 +1,6 @@
 const CACHE_NAME = 'tabata-pro-cache-v1';
 const urlsToCache = [
-  './tabata.html',
+  './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
