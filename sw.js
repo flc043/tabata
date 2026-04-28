@@ -3,7 +3,7 @@ const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './icon.svg' // 確保你有這個檔案，或改名為你的圖示檔名
+  './icon.png' // 確保你有這個檔案，或改名為你的圖示檔名
 ];
 
 self.addEventListener('install', (e) => {
